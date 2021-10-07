@@ -1,0 +1,14 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+         // Warning: this repository is going to shut down soon
+    }
+}
+def opencvsdk='C:\\Users\\Public\\Documents\\OPISCourseWork'
+
+rootProject.name = "OPISCourseWork"
+include ':app'
+include ':opencv'
+project(':opencv').projectDir = new File(opencvsdk + '\\sdk')
