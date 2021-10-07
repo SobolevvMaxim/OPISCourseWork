@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             Imgproc.CHAIN_APPROX_NONE
         )
         for (contourIdx in contours.indices) {
-            Imgproc.drawContours(src, contours, contourIdx, Scalar(0.0, 0.0, 255.0), 1)
+            Imgproc.drawContours(src, contours, contourIdx, Scalar(255.0, 0.0, 0.0), 0)
         }
         val result = bitmap?.config?.let { Bitmap.createBitmap(bitmap.width, bitmap.height, it) }
         Utils.matToBitmap(src, result)
