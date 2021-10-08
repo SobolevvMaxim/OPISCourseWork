@@ -26,10 +26,12 @@ class MainPageFragment: Fragment(R.layout.main_page_fragment) {
 
         choose_button.setOnClickListener {
             getContent.launch("image/*")
+            progressBar.visibility = View.VISIBLE
         }
 
         viewModel.value.imageLiveData.observe(viewLifecycleOwner) { bitmap ->
             current_image.setImageBitmap(bitmap)
+            progressBar.visibility = View.INVISIBLE
         }
 
         OpenCVLoader.initDebug()
