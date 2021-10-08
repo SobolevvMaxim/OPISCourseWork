@@ -31,9 +31,9 @@ class MainViewModel : ViewModel() {
                 val src = Mat()
                 Utils.bitmapToMat(it, src)
                 val gray = Mat()
-                Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY)
+                Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2HSV)
 
-                Imgproc.Canny(gray, gray, 10.0, 50.0)
+                Imgproc.Canny(src, gray, 0.0, 255.0)
                 val contours: List<MatOfPoint> = ArrayList()
                 val hierarchy = Mat()
                 Imgproc.findContours(
@@ -48,11 +48,11 @@ class MainViewModel : ViewModel() {
                         src,
                         contours,
                         contourIdx,
-                        Scalar(255.0, 0.0, 0.0),
-                        0,
-                        Imgproc.LINE_AA,
+                        Scalar(255.0),
+                        2,
+                        Imgproc.LINE_8,
                         hierarchy,
-                        1
+                        0
                     )
                 }
                 val result = Bitmap.createBitmap(it.width, it.height, it.config)
