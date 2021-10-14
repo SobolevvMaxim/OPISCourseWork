@@ -9,8 +9,8 @@ import androidx.fragment.app.viewModels
 import kotlinx.android.synthetic.main.main_page_fragment.*
 import org.opencv.android.OpenCVLoader
 
-class MainPageFragment: Fragment(R.layout.main_page_fragment) {
-    companion object{
+class MainPageFragment : Fragment(R.layout.main_page_fragment) {
+    companion object {
         fun create() = MainPageFragment()
     }
 
@@ -18,7 +18,12 @@ class MainPageFragment: Fragment(R.layout.main_page_fragment) {
 
     private val getContent =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            viewModel.value.drawContours(MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, uri))
+            viewModel.value.postResultImage(
+                MediaStore.Images.Media.getBitmap(
+                    requireActivity().contentResolver,
+                    uri
+                )
+            )
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

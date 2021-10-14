@@ -1,7 +1,6 @@
 package com.example.opiscoursework
 
 import android.graphics.Bitmap
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,30 +9,30 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.opencv.android.Utils
-import org.opencv.core.Mat
-import org.opencv.core.MatOfPoint
-import org.opencv.core.Scalar
+import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 
 class MainViewModel : ViewModel() {
     private val _imageLiveData = MutableLiveData<Bitmap>()
     val imageLiveData: LiveData<Bitmap> get() = _imageLiveData
 
-    fun drawContours(bitmap: Bitmap?) {
+    fun postResultImage(bitmap: Bitmap?) {
         viewModelScope.launch {
-            _imageLiveData.postValue(getResult(bitmap))
+            _imageLiveData.postValue(drawContours(bitmap))
         }
     }
 
-    private suspend fun getResult(bitmap: Bitmap?): Bitmap? {
+    private suspend fun drawContours(bitmap: Bitmap?): Bitmap? {
         return withContext(Dispatchers.IO) {
             bitmap?.let {
                 val src = Mat()
                 Utils.bitmapToMat(it, src)
                 val gray = Mat()
-                Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2HSV)
+                Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY)
 
-                Imgproc.Canny(src, gray, 0.0, 255.0)
+//                Core.inRange(src, Scalar(0.0, 0.0, 0.0), Scalar(0.0, 0.0, 0.0), gray)
+                Imgproc.blur(src, gray, Size(3.0, 3.0))
+                Imgproc.Canny(src, gray, 50.0, 150.0, 3, false)
                 val contours: List<MatOfPoint> = ArrayList()
                 val hierarchy = Mat()
                 Imgproc.findContours(
@@ -49,8 +48,8 @@ class MainViewModel : ViewModel() {
                         contours,
                         contourIdx,
                         Scalar(255.0),
-                        2,
-                        Imgproc.LINE_8,
+                        1,
+                        Imgproc.LINE_AA,
                         hierarchy,
                         0
                     )
