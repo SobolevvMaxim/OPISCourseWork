@@ -33,7 +33,7 @@ class MainViewModel : ViewModel() {
 //                Core.inRange(src, Scalar(0.0, 0.0, 0.0), Scalar(0.0, 0.0, 0.0), gray)
 //                Imgproc.blur(src, gray, Size(3.0, 3.0))
                 Imgproc.Canny(gray, gray, 10.0, 250.0)
-                val kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(7.0, 7.0))
+                val kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(2.0, 2.0))
                 Imgproc.morphologyEx(gray, gray, Imgproc.MORPH_CLOSE, kernel)
 //                Imgproc.Canny(src, gray, 50.0, 150.0, 3, false)
                 val contours: List<MatOfPoint> = ArrayList()
