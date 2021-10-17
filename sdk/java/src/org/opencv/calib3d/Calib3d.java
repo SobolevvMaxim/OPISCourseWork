@@ -3,9 +3,6 @@
 //
 package org.opencv.calib3d;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.opencv.calib3d.UsacParams;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfDouble;
 import org.opencv.core.MatOfPoint2f;
@@ -16,6 +13,9 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.core.TermCriteria;
 import org.opencv.utils.Converters;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // C++: class Calib3d
 
@@ -5895,11 +5895,11 @@ public class Calib3d {
         double[] principalPoint_out = new double[2];
         double[] aspectRatio_out = new double[1];
         calibrationMatrixValues_0(cameraMatrix.nativeObj, imageSize.width, imageSize.height, apertureWidth, apertureHeight, fovx_out, fovy_out, focalLength_out, principalPoint_out, aspectRatio_out);
-        if(fovx!=null) fovx[0] = (double)fovx_out[0];
-        if(fovy!=null) fovy[0] = (double)fovy_out[0];
-        if(focalLength!=null) focalLength[0] = (double)focalLength_out[0];
+        if(fovx!=null) fovx[0] = fovx_out[0];
+        if(fovy!=null) fovy[0] = fovy_out[0];
+        if(focalLength!=null) focalLength[0] = focalLength_out[0];
         if(principalPoint!=null){ principalPoint.x = principalPoint_out[0]; principalPoint.y = principalPoint_out[1]; } 
-        if(aspectRatio!=null) aspectRatio[0] = (double)aspectRatio_out[0];
+        if(aspectRatio!=null) aspectRatio[0] = aspectRatio_out[0];
     }
 
 
@@ -10033,7 +10033,7 @@ public class Calib3d {
     public static Mat estimateAffine3D(Mat src, Mat dst, double[] scale, boolean force_rotation) {
         double[] scale_out = new double[1];
         Mat retVal = new Mat(estimateAffine3D_3(src.nativeObj, dst.nativeObj, scale_out, force_rotation));
-        if(scale!=null) scale[0] = (double)scale_out[0];
+        if(scale!=null) scale[0] = scale_out[0];
         return retVal;
     }
 
@@ -10063,7 +10063,7 @@ public class Calib3d {
     public static Mat estimateAffine3D(Mat src, Mat dst, double[] scale) {
         double[] scale_out = new double[1];
         Mat retVal = new Mat(estimateAffine3D_4(src.nativeObj, dst.nativeObj, scale_out));
-        if(scale!=null) scale[0] = (double)scale_out[0];
+        if(scale!=null) scale[0] = scale_out[0];
         return retVal;
     }
 
