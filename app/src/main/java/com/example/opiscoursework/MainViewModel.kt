@@ -58,8 +58,8 @@ class MainViewModel : ViewModel() {
                             src,
                             contours,
                             contourIdx,
-                            Scalar(255.0),
-                            1,
+                            Scalar(0.0, 255.0, 0.0),
+                            0,
                             Imgproc.LINE_AA,
                             hierarchy,
                             0
