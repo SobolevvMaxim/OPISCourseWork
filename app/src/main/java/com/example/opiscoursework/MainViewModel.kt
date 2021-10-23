@@ -16,28 +16,28 @@ class MainViewModel : ViewModel() {
     private val _imageLiveData = MutableLiveData<Bitmap>()
     val imageLiveData: LiveData<Bitmap> get() = _imageLiveData
 
+    private lateinit var src: Mat
+
     fun postResultImage(bitmap: Bitmap?) {
         viewModelScope.launch {
-            _imageLiveData.postValue(drawContours(bitmap))
+            _imageLiveData.postValue(drawContours(findContours(bitmap), bitmap))
         }
     }
 
-    private suspend fun drawContours(bitmap: Bitmap?): Bitmap? {
+    private suspend fun findContours(bitmap: Bitmap?): List<MatOfPoint> {
         return withContext(Dispatchers.IO) {
+            val contours: List<MatOfPoint> = ArrayList()
             bitmap?.let {
-                val src = Mat()
+                src = Mat()
                 Utils.bitmapToMat(it, src)
                 val gray = Mat()
                 Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY)
 
-//                Core.inRange(src, Scalar(0.0, 0.0, 0.0), Scalar(0.0, 0.0, 0.0), gray)
-//                Imgproc.blur(src, gray, Size(3.0, 3.0))
                 Imgproc.Canny(gray, gray, 10.0, 250.0)
                 val kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(2.0, 2.0))
                 Imgproc.morphologyEx(gray, gray, Imgproc.MORPH_CLOSE, kernel)
-//                Imgproc.Canny(src, gray, 50.0, 150.0, 3, false)
-                val contours: List<MatOfPoint> = ArrayList()
                 val hierarchy = Mat()
+
                 Imgproc.findContours(
                     gray,
                     contours,
@@ -45,6 +45,15 @@ class MainViewModel : ViewModel() {
                     Imgproc.RETR_EXTERNAL,
                     Imgproc.CHAIN_APPROX_SIMPLE
                 )
+            }
+            return@withContext contours
+        }
+    }
+
+    private suspend fun drawContours(contours: List<MatOfPoint>, bitmap: Bitmap?): Bitmap? {
+        return withContext(Dispatchers.IO) {
+            bitmap?.let {
+                val hierarchy = Mat()
                 for (contourIdx in contours.indices) {
                     val matOfPoint = contours[contourIdx]
                     val tempMat = MatOfPoint2f()
