@@ -35,7 +35,7 @@ class MainPageFragment : Fragment(R.layout.main_page_fragment) {
         }
 
         viewModel.value.imageLiveData.observe(viewLifecycleOwner) { bitmap ->
-            current_image.setImageBitmap(bitmap)
+            photo_image.setImageBitmap(bitmap)
             progressBar.visibility = View.INVISIBLE
         }
 
