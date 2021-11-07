@@ -16,6 +16,10 @@ class MainViewModel : ViewModel() {
     private val _imageLiveData = MutableLiveData<Bitmap>()
     val imageLiveData: LiveData<Bitmap> get() = _imageLiveData
 
+    object ContoursSettings {
+        var currentSettings = Settings(CannySettings(), SizeSettings(), LineColor())
+    }
+
     private lateinit var src: Mat
 
     fun postResultImage(bitmap: Bitmap?) {
@@ -33,8 +37,21 @@ class MainViewModel : ViewModel() {
                 val gray = Mat()
                 Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY)
 
-                Imgproc.Canny(gray, gray, 10.0, 250.0) // first border + second border
-                val kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(2.0, 2.0)) // Size choice
+                Imgproc.Canny(
+                    gray,
+                    gray,
+                    ContoursSettings.currentSettings.canny.border1,
+                    ContoursSettings.currentSettings.canny.border2
+                )
+
+                val kernel = Imgproc.getStructuringElement(
+                    Imgproc.MORPH_RECT,
+                    Size(
+                        ContoursSettings.currentSettings.size.border1,
+                        ContoursSettings.currentSettings.size.border2
+                    )
+                )
+
                 Imgproc.morphologyEx(gray, gray, Imgproc.MORPH_CLOSE, kernel)
                 val hierarchy = Mat()
 
@@ -67,8 +84,12 @@ class MainViewModel : ViewModel() {
                             src,
                             contours,
                             contourIdx,
-                            Scalar(0.0, 255.0, 0.0), // Line color
-                            0, // Line thickness
+                            Scalar(
+                                ContoursSettings.currentSettings.lineColor.color1,
+                                ContoursSettings.currentSettings.lineColor.color2,
+                                ContoursSettings.currentSettings.lineColor.color3
+                            ),
+                            ContoursSettings.currentSettings.lineThickness,
                             Imgproc.LINE_AA,
                             hierarchy,
                             0
@@ -79,5 +100,9 @@ class MainViewModel : ViewModel() {
                 return@withContext result
             }
         }
+    }
+
+    fun changeSettings(newSettings: com.example.opiscoursework.Settings) {
+        ContoursSettings.currentSettings = newSettings
     }
 }

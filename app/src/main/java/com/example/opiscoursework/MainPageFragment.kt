@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import androidx.fragment.app.viewModels
 import kotlinx.android.synthetic.main.main_page_fragment.*
 import org.opencv.android.OpenCVLoader
 import androidx.appcompat.app.AlertDialog
+import kotlinx.android.synthetic.main.settings_dialog.*
 
 class MainPageFragment : Fragment(R.layout.main_page_fragment) {
     companion object {
@@ -74,12 +76,27 @@ class MainPageFragment : Fragment(R.layout.main_page_fragment) {
             setView(inflater.inflate(R.layout.settings_dialog, null))
             setTitle(R.string.settings)
             setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok)) { _, _ ->
-
+                val newCanny = CannySettings(
+                    border1 = getValue(canny_border1),
+                    border2 = getValue(canny_border2)
+                )
+                val newSize = SizeSettings(
+                    border1 = getValue(size_border1),
+                    border2 = getValue(size_border2)
+                )
+                val newLineColor = LineColor(
+                    color1 = getValue(color1),
+                    color2 = getValue(color2),
+                    color3 = getValue(color3)
+                )
+                val newThickness = seekbar_thickness.progress
+                viewModel.value.changeSettings(Settings(newCanny, newSize, newLineColor, newThickness))
             }
             setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel)) { _, _ ->
-
             }
             show()
         }
     }
+
+    private fun getValue(ed: EditText?): Double = ed?.text.toString().toDouble()
 }
