@@ -33,8 +33,8 @@ class MainViewModel : ViewModel() {
                 val gray = Mat()
                 Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY)
 
-                Imgproc.Canny(gray, gray, 10.0, 250.0)
-                val kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(2.0, 2.0))
+                Imgproc.Canny(gray, gray, 10.0, 250.0) // first border + second border
+                val kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(2.0, 2.0)) // Size choice
                 Imgproc.morphologyEx(gray, gray, Imgproc.MORPH_CLOSE, kernel)
                 val hierarchy = Mat()
 
@@ -67,8 +67,8 @@ class MainViewModel : ViewModel() {
                             src,
                             contours,
                             contourIdx,
-                            Scalar(0.0, 255.0, 0.0),
-                            0,
+                            Scalar(0.0, 255.0, 0.0), // Line color
+                            0, // Line thickness
                             Imgproc.LINE_AA,
                             hierarchy,
                             0

@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">OPISCourseWork</string>
     <string name="choose_the_image">Choose the image</string>
+    <string name="settings">Settings</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="default_canny_border1">10.0</string>
+    <string name="default_canny_border2">250.0</string>
+    <string name="canny_borders">Canny borders</string>
+    <string name="size_defalut">2.0</string>
+    <string name="line_color">Line color</string>
+    <string name="default_color1">0.0</string>
+    <string name="default_color2">255.0</string>
+    <string name="line_thickness">Line thickness</string>
+    <string name="size_title">Size()</string>
 </resources>
