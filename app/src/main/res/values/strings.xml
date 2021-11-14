@@ -8,9 +8,9 @@
     <string name="default_canny_border2">250.0</string>
     <string name="canny_borders">Canny borders</string>
     <string name="size_defalut">2.0</string>
-    <string name="line_color">Line color</string>
+    <string name="line_color">Draw line color (RGB)</string>
     <string name="default_color1">0.0</string>
     <string name="default_color2">255.0</string>
-    <string name="line_thickness">Line thickness</string>
-    <string name="size_title">Size()</string>
+    <string name="line_thickness">Draw line thickness</string>
+    <string name="size_title">Contour size borders</string>
 </resources>
