@@ -1,6 +1,7 @@
 package com.example.opiscoursework
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
@@ -11,6 +12,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import kotlinx.android.synthetic.main.main_page_fragment.*
@@ -63,7 +65,6 @@ class MainPageFragment : Fragment(R.layout.main_page_fragment) {
         return when (item.itemId) {
             R.id.settings -> {
                 showSettingsDialog()
-                Toast.makeText(context, "Settings pressed", Toast.LENGTH_LONG).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -95,27 +96,28 @@ class MainPageFragment : Fragment(R.layout.main_page_fragment) {
             }
             setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel)) { _, _ ->
             }
-            setCurrentValues(viewModel.value.getSettings())
+
             show()
-        }
-    }
 
-    private fun setCurrentValues(settings: Settings) {
-        settings.apply {
-            canny.apply { 
-                canny_border1.setText(border1.toString(), TextView.BufferType.EDITABLE)
-                canny_border2.setText(border2.toString(), TextView.BufferType.EDITABLE)
-            }
+            val settings = viewModel.value.getSettings()
+            settings.apply {
+                canny.apply {
+                    canny_border1.setText(border1.toString(), TextView.BufferType.EDITABLE)
+                    canny_border2.setText(border2.toString(), TextView.BufferType.EDITABLE)
+                }
 
-            size.apply {
-                size_border1.setText(border1.toString(), TextView.BufferType.EDITABLE)
-                size_border2.setText(border2.toString(), TextView.BufferType.EDITABLE)
-            }
+                size.apply {
+                    size_border1.setText(border1.toString(), TextView.BufferType.EDITABLE)
+                    size_border2.setText(border2.toString(), TextView.BufferType.EDITABLE)
+                }
 
-            lineColor.apply {
-                color_1.setText(color1.toString(), TextView.BufferType.EDITABLE)
-                color_2.setText(color2.toString(), TextView.BufferType.EDITABLE)
-                color_3.setText(color3.toString(), TextView.BufferType.EDITABLE)
+                lineColor.apply {
+                    color_1.setText(color1.toString(), TextView.BufferType.EDITABLE)
+                    color_2.setText(color2.toString(), TextView.BufferType.EDITABLE)
+                    color_3.setText(color3.toString(), TextView.BufferType.EDITABLE)
+                }
+
+                seekbar_thickness.progress = lineThickness
             }
         }
     }
