@@ -37,7 +37,7 @@ class MainViewModel : ViewModel() {
                 val gray = Mat()
                 Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY)
 
-                Imgproc.Canny(
+                Imgproc.Canny( // границы для нахождения углов ( значения для расчета интенсивности градиента изображения )
                     gray,
                     gray,
                     ContoursSettings.currentSettings.canny.border1,
@@ -45,14 +45,14 @@ class MainViewModel : ViewModel() {
                 )
 
                 val kernel = Imgproc.getStructuringElement(
-                    Imgproc.MORPH_RECT,
-                    Size(
+                    Imgproc.MORPH_RECT, // форма контура
+                    Size(               // размеры контуров
                         ContoursSettings.currentSettings.size.border1,
                         ContoursSettings.currentSettings.size.border2
                     )
                 )
 
-                Imgproc.morphologyEx(gray, gray, Imgproc.MORPH_CLOSE, kernel)
+                Imgproc.morphologyEx(gray, gray, Imgproc.MORPH_CLOSE, kernel) // нахождение точек внутри замкнутых контуров для удаления шумов
                 val hierarchy = Mat()
 
                 Imgproc.findContours(
@@ -60,7 +60,7 @@ class MainViewModel : ViewModel() {
                     contours,
                     hierarchy,
                     Imgproc.RETR_TREE, // тип контуров в иерархии
-                    Imgproc.CHAIN_APPROX_SIMPLE
+                    Imgproc.CHAIN_APPROX_SIMPLE // тип сохранения точек ( либо все, либо только крайние )
                 )
             }
             return@withContext contours
