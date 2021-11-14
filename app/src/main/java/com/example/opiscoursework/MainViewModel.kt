@@ -17,7 +17,7 @@ class MainViewModel : ViewModel() {
     val imageLiveData: LiveData<Bitmap> get() = _imageLiveData
 
     object ContoursSettings {
-        var currentSettings = Settings(CannySettings(), SizeSettings(), LineColor())
+        var currentSettings = Settings(CannySettings(), ContourThickness(), DrawLineColor())
     }
 
     private lateinit var src: Mat
@@ -52,7 +52,12 @@ class MainViewModel : ViewModel() {
                     )
                 )
 
-                Imgproc.morphologyEx(gray, gray, Imgproc.MORPH_CLOSE, kernel) // нахождение точек внутри замкнутых контуров для удаления шумов
+                Imgproc.morphologyEx(
+                    gray,
+                    gray,
+                    Imgproc.MORPH_CLOSE,
+                    kernel
+                ) // нахождение точек внутри замкнутых контуров для удаления шумов
                 val hierarchy = Mat()
 
                 Imgproc.findContours(
@@ -85,11 +90,11 @@ class MainViewModel : ViewModel() {
                             contours,
                             contourIdx,
                             Scalar(
-                                ContoursSettings.currentSettings.lineColor.color1,
-                                ContoursSettings.currentSettings.lineColor.color2,
-                                ContoursSettings.currentSettings.lineColor.color3
+                                ContoursSettings.currentSettings.drawLineColor.color1,
+                                ContoursSettings.currentSettings.drawLineColor.color2,
+                                ContoursSettings.currentSettings.drawLineColor.color3
                             ),
-                            ContoursSettings.currentSettings.lineThickness,
+                            ContoursSettings.currentSettings.drawLineThickness,
                             Imgproc.LINE_AA,
                             hierarchy,
                             0

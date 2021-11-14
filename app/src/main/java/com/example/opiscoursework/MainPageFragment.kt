@@ -1,7 +1,6 @@
 package com.example.opiscoursework
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
@@ -10,9 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import kotlinx.android.synthetic.main.main_page_fragment.*
@@ -82,17 +79,24 @@ class MainPageFragment : Fragment(R.layout.main_page_fragment) {
                     border1 = getValue(canny_border1),
                     border2 = getValue(canny_border2)
                 )
-                val newSize = SizeSettings(
+                val newSize = ContourThickness(
                     border1 = getValue(size_border1),
                     border2 = getValue(size_border2)
                 )
-                val newLineColor = LineColor(
+                val newLineColor = DrawLineColor(
                     color1 = getValue(color_1),
                     color2 = getValue(color_2),
                     color3 = getValue(color_3)
                 )
                 val newThickness = seekbar_thickness.progress
-                viewModel.value.changeSettings(Settings(newCanny, newSize, newLineColor, newThickness))
+                viewModel.value.changeSettings(
+                    Settings(
+                        newCanny,
+                        newSize,
+                        newLineColor,
+                        newThickness
+                    )
+                )
             }
             setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel)) { _, _ ->
             }
@@ -111,13 +115,13 @@ class MainPageFragment : Fragment(R.layout.main_page_fragment) {
                     size_border2.setText(border2.toString(), TextView.BufferType.EDITABLE)
                 }
 
-                lineColor.apply {
+                drawLineColor.apply {
                     color_1.setText(color1.toString(), TextView.BufferType.EDITABLE)
                     color_2.setText(color2.toString(), TextView.BufferType.EDITABLE)
                     color_3.setText(color3.toString(), TextView.BufferType.EDITABLE)
                 }
 
-                seekbar_thickness.progress = lineThickness
+                seekbar_thickness.progress = drawLineThickness
             }
         }
     }
