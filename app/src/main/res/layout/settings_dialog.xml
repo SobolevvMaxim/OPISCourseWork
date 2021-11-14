@@ -137,7 +137,7 @@
             app:layout_constraintTop_toBottomOf="@+id/line_color_title">
 
             <EditText
-                android:id="@+id/color1"
+                android:id="@+id/color_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -150,7 +150,7 @@
                 tools:ignore="LabelFor,DuplicateSpeakableTextCheck" />
 
             <EditText
-                android:id="@+id/color2"
+                android:id="@+id/color_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -163,7 +163,7 @@
                 tools:ignore="LabelFor" />
 
             <EditText
-                android:id="@+id/color3"
+                android:id="@+id/color_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

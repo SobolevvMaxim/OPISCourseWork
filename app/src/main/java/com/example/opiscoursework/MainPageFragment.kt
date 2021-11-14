@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -85,16 +86,37 @@ class MainPageFragment : Fragment(R.layout.main_page_fragment) {
                     border2 = getValue(size_border2)
                 )
                 val newLineColor = LineColor(
-                    color1 = getValue(color1),
-                    color2 = getValue(color2),
-                    color3 = getValue(color3)
+                    color1 = getValue(color_1),
+                    color2 = getValue(color_2),
+                    color3 = getValue(color_3)
                 )
                 val newThickness = seekbar_thickness.progress
                 viewModel.value.changeSettings(Settings(newCanny, newSize, newLineColor, newThickness))
             }
             setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel)) { _, _ ->
             }
+            setCurrentValues(viewModel.value.getSettings())
             show()
+        }
+    }
+
+    private fun setCurrentValues(settings: Settings) {
+        settings.apply {
+            canny.apply { 
+                canny_border1.setText(border1.toString(), TextView.BufferType.EDITABLE)
+                canny_border2.setText(border2.toString(), TextView.BufferType.EDITABLE)
+            }
+
+            size.apply {
+                size_border1.setText(border1.toString(), TextView.BufferType.EDITABLE)
+                size_border2.setText(border2.toString(), TextView.BufferType.EDITABLE)
+            }
+
+            lineColor.apply {
+                color_1.setText(color1.toString(), TextView.BufferType.EDITABLE)
+                color_2.setText(color2.toString(), TextView.BufferType.EDITABLE)
+                color_3.setText(color3.toString(), TextView.BufferType.EDITABLE)
+            }
         }
     }
 

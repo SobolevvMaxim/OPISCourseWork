@@ -59,7 +59,7 @@ class MainViewModel : ViewModel() {
                     gray,
                     contours,
                     hierarchy,
-                    Imgproc.RETR_EXTERNAL,
+                    Imgproc.RETR_TREE, // тип контуров в иерархии
                     Imgproc.CHAIN_APPROX_SIMPLE
                 )
             }
@@ -102,7 +102,9 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun changeSettings(newSettings: com.example.opiscoursework.Settings) {
+    fun changeSettings(newSettings: Settings) {
         ContoursSettings.currentSettings = newSettings
     }
+
+    fun getSettings(): Settings = ContoursSettings.currentSettings
 }
