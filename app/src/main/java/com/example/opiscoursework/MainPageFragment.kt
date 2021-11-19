@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.main_page_fragment.*
 import org.opencv.android.OpenCVLoader
 import androidx.appcompat.app.AlertDialog
 import kotlinx.android.synthetic.main.settings_dialog.*
+import kotlin.math.roundToInt
 
 class MainPageFragment : Fragment(R.layout.main_page_fragment) {
     companion object {
@@ -81,7 +82,7 @@ class MainPageFragment : Fragment(R.layout.main_page_fragment) {
                 )
                 val newSize = ContourThickness(
                     border1 = getValue(size_border1),
-                    border2 = getValue(size_border2)
+                    border2 = getValue(size_border1)
                 )
                 val newLineColor = DrawLineColor(
                     color1 = getValue(color_1),
@@ -106,19 +107,19 @@ class MainPageFragment : Fragment(R.layout.main_page_fragment) {
             val settings = viewModel.value.getSettings()
             settings.apply {
                 canny.apply {
-                    canny_border1.setText(border1.toString(), TextView.BufferType.EDITABLE)
-                    canny_border2.setText(border2.toString(), TextView.BufferType.EDITABLE)
+                    canny_border1.setText(border1.roundToInt().toString(), TextView.BufferType.EDITABLE)
+                    canny_border2.setText(border2.roundToInt().toString(), TextView.BufferType.EDITABLE)
                 }
 
                 size.apply {
-                    size_border1.setText(border1.toString(), TextView.BufferType.EDITABLE)
-                    size_border2.setText(border2.toString(), TextView.BufferType.EDITABLE)
+                    val value = if(border1.roundToInt() == border1.toInt()) border1.roundToInt() else border1
+                    size_border1.setText(value.toString(), TextView.BufferType.EDITABLE)
                 }
 
                 drawLineColor.apply {
-                    color_1.setText(color1.toString(), TextView.BufferType.EDITABLE)
-                    color_2.setText(color2.toString(), TextView.BufferType.EDITABLE)
-                    color_3.setText(color3.toString(), TextView.BufferType.EDITABLE)
+                    color_1.setText(color1.roundToInt().toString(), TextView.BufferType.EDITABLE)
+                    color_2.setText(color2.roundToInt().toString(), TextView.BufferType.EDITABLE)
+                    color_3.setText(color3.roundToInt().toString(), TextView.BufferType.EDITABLE)
                 }
 
                 seekbar_thickness.progress = drawLineThickness

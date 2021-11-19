@@ -64,7 +64,7 @@ class MainViewModel : ViewModel() {
                     gray,
                     contours,
                     hierarchy,
-                    Imgproc.RETR_TREE, // тип контуров в иерархии
+                    Imgproc.RETR_EXTERNAL, // тип контуров в иерархии
                     Imgproc.CHAIN_APPROX_SIMPLE // тип сохранения точек ( либо все, либо только крайние )
                 )
             }

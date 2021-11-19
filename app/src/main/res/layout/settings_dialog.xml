@@ -45,7 +45,7 @@
                 android:layout_weight="1"
                 android:autofillHints="border1"
                 android:ems="10"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:minHeight="48dp"
                 android:text="@string/default_canny_border1"
                 android:textColor="#78909C"
@@ -58,7 +58,7 @@
                 android:layout_weight="1"
                 android:autofillHints="border2"
                 android:ems="10"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:minHeight="48dp"
                 android:text="@string/default_canny_border2"
                 android:textColor="#78909C"
@@ -89,29 +89,19 @@
 
             <EditText
                 android:id="@+id/size_border1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
                 android:layout_weight="1"
                 android:autofillHints="border1"
                 android:ems="10"
-                android:inputType="numberDecimal"
+                android:inputType="number|numberDecimal"
                 android:minHeight="48dp"
                 android:text="@string/size_defalut"
                 android:textColor="#78909C"
                 tools:ignore="LabelFor,DuplicateSpeakableTextCheck" />
 
-            <EditText
-                android:id="@+id/size_border2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:autofillHints="border2"
-                android:ems="10"
-                android:inputType="numberDecimal"
-                android:minHeight="48dp"
-                android:text="@string/size_defalut"
-                android:textColor="#78909C"
-                tools:ignore="LabelFor" />
         </LinearLayout>
 
         <TextView
@@ -143,7 +133,7 @@
                 android:layout_weight="1"
                 android:autofillHints="border1"
                 android:ems="10"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:minHeight="48dp"
                 android:text="@string/default_color1"
                 android:textColor="#78909C"
@@ -156,7 +146,7 @@
                 android:layout_weight="1"
                 android:autofillHints="border2"
                 android:ems="10"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:minHeight="48dp"
                 android:text="@string/default_color2"
                 android:textColor="#78909C"
@@ -169,7 +159,7 @@
                 android:layout_weight="1"
                 android:autofillHints="border2"
                 android:ems="10"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:minHeight="48dp"
                 android:text="@string/default_color1"
                 android:textColor="#78909C"
