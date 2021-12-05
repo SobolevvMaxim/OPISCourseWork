@@ -1,6 +1,7 @@
 package com.example.opiscoursework
 
 import android.annotation.SuppressLint
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Menu
@@ -77,17 +78,17 @@ class MainPageFragment : Fragment(R.layout.main_page_fragment) {
             setTitle(R.string.settings)
             setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok)) { _, _ ->
                 val newCanny = CannySettings(
-                    border1 = getValue(canny_border1),
-                    border2 = getValue(canny_border2)
+                    border1 = getCurrentValue(canny_border1),
+                    border2 = getCurrentValue(canny_border2)
                 )
                 val newSize = ContourThickness(
-                    border1 = getValue(size_border1),
-                    border2 = getValue(size_border1)
+                    border1 = getCurrentValue(size_border1),
+                    border2 = getCurrentValue(size_border1)
                 )
                 val newLineColor = DrawLineColor(
-                    color1 = getValue(color_1),
-                    color2 = getValue(color_2),
-                    color3 = getValue(color_3)
+                    color1 = getCurrentValue(color_1),
+                    color2 = getCurrentValue(color_2),
+                    color3 = getCurrentValue(color_3)
                 )
                 val newThickness = seekbar_thickness.progress
                 viewModel.value.changeSettings(
@@ -107,19 +108,18 @@ class MainPageFragment : Fragment(R.layout.main_page_fragment) {
             val settings = viewModel.value.getSettings()
             settings.apply {
                 canny.apply {
-                    canny_border1.setText(border1.roundToInt().toString(), TextView.BufferType.EDITABLE)
-                    canny_border2.setText(border2.roundToInt().toString(), TextView.BufferType.EDITABLE)
+                    canny_border1.setCurrentValue(canny.border1)
+                    canny_border2.setCurrentValue(canny.border2)
                 }
 
                 size.apply {
-                    val value = if(border1.roundToInt() == border1.toInt()) border1.roundToInt() else border1
-                    size_border1.setText(value.toString(), TextView.BufferType.EDITABLE)
+                    size_border1.setCurrentValue(border1)
                 }
 
                 drawLineColor.apply {
-                    color_1.setText(color1.roundToInt().toString(), TextView.BufferType.EDITABLE)
-                    color_2.setText(color2.roundToInt().toString(), TextView.BufferType.EDITABLE)
-                    color_3.setText(color3.roundToInt().toString(), TextView.BufferType.EDITABLE)
+                    color_1.setCurrentValue(color1)
+                    color_2.setCurrentValue(color2)
+                    color_3.setCurrentValue(color3)
                 }
 
                 seekbar_thickness.progress = drawLineThickness
@@ -127,5 +127,9 @@ class MainPageFragment : Fragment(R.layout.main_page_fragment) {
         }
     }
 
-    private fun getValue(ed: EditText?): Double = ed?.text.toString().toDouble()
+    private fun getCurrentValue(ed: EditText?): Double = ed?.text.toString().toDouble()
+
+    private fun EditText.setCurrentValue(value: Double) {
+        this.setText(value.roundToInt().toString(), TextView.BufferType.EDITABLE)
+    }
 }

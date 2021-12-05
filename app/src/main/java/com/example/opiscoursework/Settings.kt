@@ -8,9 +8,15 @@ data class Settings(
     var drawLineThickness: Int = 0
 )
 
-data class CannySettings(var border1: Double = 10.0, var border2: Double = 250.0)
+data class CannySettings(
+    var border1: Double = 10.0,
+    var border2: Double = 250.0
+)
 
-data class ContourThickness(var border1: Double = 2.0, var border2: Double = 2.0)
+data class ContourThickness(
+    var border1: Double = 2.0,
+    var border2: Double = 2.0
+)
 
 data class DrawLineColor(
     var color1: Double = 0.0,

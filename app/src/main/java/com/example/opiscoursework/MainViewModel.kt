@@ -1,6 +1,7 @@
 package com.example.opiscoursework
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,31 +25,36 @@ class MainViewModel : ViewModel() {
 
     fun postResultImage(bitmap: Bitmap?) {
         viewModelScope.launch {
-            _imageLiveData.postValue(drawContours(findContours(bitmap), bitmap))
+            val result = bitmap?.let {
+                drawContours(findContours(it), it)
+            } ?: throw Exception("Empty image")
+            _imageLiveData.postValue(result)
         }
     }
 
-    private suspend fun findContours(bitmap: Bitmap?): List<MatOfPoint> {
+    private suspend fun findContours(bitmap: Bitmap): List<MatOfPoint> {
         return withContext(Dispatchers.IO) {
             val contours: List<MatOfPoint> = ArrayList()
-            bitmap?.let {
-                src = Mat()
-                Utils.bitmapToMat(it, src)
-                val gray = Mat()
-                Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY)
+            src = Mat()
+            Utils.bitmapToMat(bitmap, src)
+            val gray = Mat()
+            Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY)
 
-                Imgproc.Canny( // границы для нахождения углов ( значения для расчета интенсивности градиента изображения )
-                    gray,
-                    gray,
-                    ContoursSettings.currentSettings.canny.border1,
-                    ContoursSettings.currentSettings.canny.border2
-                )
+            ContoursSettings.currentSettings.apply {
+                canny.apply {
+                    Imgproc.Canny( // границы для нахождения углов ( значения для расчета интенсивности градиента изображения )
+                        gray,
+                        gray,
+                        border1,
+                        border2
+                    )
+                }
 
                 val kernel = Imgproc.getStructuringElement(
                     Imgproc.MORPH_RECT, // форма контура
                     Size(               // размеры контуров
-                        ContoursSettings.currentSettings.size.border1,
-                        ContoursSettings.currentSettings.size.border2
+                        size.border1,
+                        size.border2
                     )
                 )
 
@@ -58,52 +64,55 @@ class MainViewModel : ViewModel() {
                     Imgproc.MORPH_CLOSE,
                     kernel
                 ) // нахождение точек внутри замкнутых контуров для удаления шумов
-                val hierarchy = Mat()
-
-                Imgproc.findContours(
-                    gray,
-                    contours,
-                    hierarchy,
-                    Imgproc.RETR_EXTERNAL, // тип контуров в иерархии
-                    Imgproc.CHAIN_APPROX_SIMPLE // тип сохранения точек ( либо все, либо только крайние )
-                )
             }
+
+            val hierarchy = Mat()
+
+            Imgproc.findContours(
+                gray,
+                contours,
+                hierarchy,
+                Imgproc.RETR_EXTERNAL, // тип контуров в иерархии
+                Imgproc.CHAIN_APPROX_SIMPLE // тип сохранения точек ( либо все, либо только крайние )
+            )
+
             return@withContext contours
         }
     }
 
-    private suspend fun drawContours(contours: List<MatOfPoint>, bitmap: Bitmap?): Bitmap? {
+    private suspend fun drawContours(contours: List<MatOfPoint>, bitmap: Bitmap): Bitmap {
         return withContext(Dispatchers.IO) {
-            bitmap?.let {
-                val hierarchy = Mat()
-                for (contourIdx in contours.indices) {
-                    val matOfPoint = contours[contourIdx]
-                    val tempMat = MatOfPoint2f()
-                    matOfPoint.convertTo(tempMat, CvType.CV_32F)
+            val hierarchy = Mat()
+            for (contourIdx in contours.indices) {
+                val matOfPoint = contours[contourIdx]
+                val tempMat = MatOfPoint2f()
+                matOfPoint.convertTo(tempMat, CvType.CV_32F)
 
-                    val sm = Imgproc.arcLength(tempMat, true)
-                    val apd = MatOfPoint2f()
-                    Imgproc.approxPolyDP(tempMat, apd, 0.02 * sm, true)
-                    if (apd.elemSize() > 2)
+                val sm = Imgproc.arcLength(tempMat, true)
+                val apd = MatOfPoint2f()
+                Imgproc.approxPolyDP(tempMat, apd, 0.02 * sm, true)
+                if (apd.elemSize() > 2)
+                    ContoursSettings.currentSettings.apply {
                         Imgproc.drawContours(
                             src,
                             contours,
                             contourIdx,
                             Scalar(
-                                ContoursSettings.currentSettings.drawLineColor.color1,
-                                ContoursSettings.currentSettings.drawLineColor.color2,
-                                ContoursSettings.currentSettings.drawLineColor.color3
+                                drawLineColor.color1,
+                                drawLineColor.color2,
+                                drawLineColor.color3
                             ),
-                            ContoursSettings.currentSettings.drawLineThickness,
+                            drawLineThickness,
                             Imgproc.LINE_AA,
                             hierarchy,
                             0
                         )
-                }
-                val result = Bitmap.createBitmap(it.width, it.height, it.config)
-                Utils.matToBitmap(src, result)
-                return@withContext result
+                    }
+
             }
+            val result = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
+            Utils.matToBitmap(src, result)
+            return@withContext result
         }
     }
 
