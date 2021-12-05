@@ -113,7 +113,7 @@ class MainPageFragment : Fragment(R.layout.main_page_fragment) {
                 }
 
                 size.apply {
-                    size_border1.setCurrentValue(border1)
+                    size_border1.setText(border1.toString(), TextView.BufferType.EDITABLE)
                 }
 
                 drawLineColor.apply {
